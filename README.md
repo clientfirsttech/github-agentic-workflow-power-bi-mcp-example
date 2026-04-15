@@ -1,10 +1,10 @@
 # Fabric Agentic Workflow Template
 
-This repository is a **template** for using [GitHub Agentic Workflows](https://github.com/github/gh-aw) with Microsoft Fabric Power BI semantic models. It demonstrates how an AI agent can automatically generate documentation for your semantic models using the [Power BI Modeling MCP Server](https://www.npmjs.com/package/@microsoft/powerbi-modeling-mcp), packaged as a container.
+This repository is a **template** for using [GitHub Agentic Workflows](https://github.com/github/gh-aw) with Microsoft Fabric Power BI semantic models. It demonstrates how an AI agent can automatically generate documentation for your semantic models using the [Power BI Modeling MCP Server](https://www.npmjs.com/package/@microsoft/powerbi-modeling-mcp), available as a pre-built container on [Docker Hub](https://hub.docker.com/repository/docker/kerski/powerbi-modeling-mcp/general).
 
 ## Getting Started — Clone to a Private Repository
 
-Because this template involves GitHub Actions secrets (tokens, credentials) and container images in GHCR, we recommend hosting your copy in a **private repository**. GitHub does not allow forking a public repo as private, so use the steps below to mirror it instead.
+Because this template involves GitHub Actions secrets (tokens, credentials), we recommend hosting your copy in a **private repository**. GitHub does not allow forking a public repo as private, so use the steps below to mirror it instead.
 
 ### Option A: Mirror via the command line
 
@@ -44,7 +44,6 @@ Once your private repo is ready, continue with the [Setup Guide](#setup-guide) b
 | Component | Description |
 |---|---|
 | **Agentic Workflow** (`.github/workflows/generate-pbi-docs.md`) | A GitHub Agentic Workflow that uses Copilot to generate Markdown documentation for every `*.SemanticModel` in the repo. |
-| **MCP Container Build** (`.github/workflows/publish-powerbi-mcp-container.yml`) | A GitHub Actions workflow that builds and publishes the Power BI Modeling MCP Server as a Docker container to GitHub Container Registry (GHCR). |
 | **Sample Semantic Models** | Example Power BI project files (`SampleModel`, `Relationships`) so you can test the workflow immediately. |
 | **Documentation Output** (`documentation/`) | Directory where the agent writes generated documentation and opens a pull request. |
 
@@ -88,53 +87,9 @@ The agentic workflow uses the `create-pull-request` safe output to open PRs with
 
 Without this permission, the agent will be able to generate documentation but will fail when attempting to open a pull request.
 
-### Step 3: Build and Publish the MCP Container
+> **Note:** This template uses the pre-built [Power BI Modeling MCP Server container from Docker Hub](https://hub.docker.com/repository/docker/kerski/powerbi-modeling-mcp/general) (`kerski/powerbi-modeling-mcp:latest`). No container build or publishing step is required — the agentic workflow pulls the image directly from Docker Hub at runtime.
 
-The agentic workflow references a Docker container for the Power BI Modeling MCP Server. You must build and publish this container to GitHub Container Registry (GHCR) before the agent can use it.
-
-The publish workflow is at `.github/workflows/publish-powerbi-mcp-container.yml`. It builds a container from the `@microsoft/powerbi-modeling-mcp` npm package and pushes it to `ghcr.io/<owner>/powerbi-modeling-mcp:latest`.
-
-**To build the container:**
-
-1. Go to the **Actions** tab in your repository.
-2. Select the **Publish PowerBI MCP Container** workflow from the left sidebar.
-3. Click **Run workflow** → **Run workflow** (on the `main` branch).
-4. Wait for the workflow to complete successfully.
-
-This will push the container image to `ghcr.io/<your-github-username>/powerbi-modeling-mcp:latest`.
-
-> **Important:** After forking or copying this template, the container image path must point to **your** GHCR namespace, not the original author's. See [Step 4](#step-4-update-the-agentic-workflow-to-point-to-your-container) below.
-
-### Step 4: Update the Agentic Workflow to Point to Your Container
-
-After building the container under your own GHCR namespace, update the agentic workflow definition to reference it.
-
-1. Open `.github/workflows/generate-pbi-docs.md`.
-2. Find the `mcp-servers` section:
-   ```yaml
-   mcp-servers:
-     powerbi-modeling-mcp:
-       type: stdio
-       container: ghcr.io/kerski/powerbi-modeling-mcp:latest
-   ```
-3. Replace `kerski` with your GitHub username or organization name:
-   ```yaml
-   mcp-servers:
-     powerbi-modeling-mcp:
-       type: stdio
-       container: ghcr.io/<your-github-username>/powerbi-modeling-mcp:latest
-   ```
-4. Similarly, update `.github/workflows/publish-powerbi-mcp-container.yml` to push to your namespace:
-   ```yaml
-   --tag ghcr.io/<your-github-username>/powerbi-modeling-mcp:latest \
-   ```
-5. Recompile the agentic workflow:
-   ```bash
-   gh aw compile
-   ```
-6. Commit and push all changes (the `.md`, `.lock.yml`, and container workflow).
-
-### Step 5: Test the Agentic Workflow
+### Step 3: Test the Agentic Workflow
 
 You can trigger the agentic workflow in two ways:
 
@@ -156,8 +111,7 @@ When the workflow runs, the Copilot agent will:
 │   │   └── actions-lock.json          # Pinned action SHAs for agentic workflows
 │   └── workflows/
 │       ├── generate-pbi-docs.md        # Agentic workflow definition (source of truth)
-│       ├── generate-pbi-docs.lock.yml  # Compiled workflow (auto-generated, do not edit)
-│       └── publish-powerbi-mcp-container.yml  # Builds the MCP Server container
+│       └── generate-pbi-docs.lock.yml  # Compiled workflow (auto-generated, do not edit)
 ├── SampleModel.SemanticModel/          # Example semantic model (TMDL format)
 ├── SampleModel.Report/                 # Example report
 ├── SampleModel.pbip                    # Power BI project file
@@ -189,14 +143,14 @@ The `.md` file is compiled into a `.lock.yml` file using `gh aw compile`. The `.
 To use this template with your own semantic models:
 
 1. Replace the sample `*.SemanticModel`, `*.Report`, and `*.pbip` files with your own Power BI project files.
-2. Follow the [Setup Guide](#setup-guide) to configure your secrets, permissions, and container.
+2. Follow the [Setup Guide](#setup-guide) to configure your secrets and permissions.
 3. Push to `main` and let the agentic workflow generate documentation for your models.
 
 ## Troubleshooting
 
 | Problem | Solution |
 |---|---|
-| Agent fails to connect to MCP server | Ensure the container image exists in your GHCR namespace and is accessible. Run the publish workflow first. |
+| Agent fails to connect to MCP server | Ensure the [Docker Hub container image](https://hub.docker.com/repository/docker/kerski/powerbi-modeling-mcp/general) is accessible and the workflow has network access to Docker Hub. |
 | Agent cannot create a pull request | Check that **Workflow permissions** allow creating PRs (see [Step 2](#step-2-grant-github-actions-permission-to-create-pull-requests)). |
 | Workflow doesn't trigger on push | Verify the push was to `main` and the changed files match `*.SemanticModel/**`. |
 | `COPILOT_GITHUB_TOKEN` error | Ensure the secret is set correctly and the token has the **Copilot** account permission set to **Read-only** (see [Step 1](#step-1-set-up-the-copilot_github_token)). |
