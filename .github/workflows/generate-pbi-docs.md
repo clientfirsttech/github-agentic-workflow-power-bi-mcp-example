@@ -39,7 +39,7 @@ network:
 mcp-servers:
   powerbi-modeling-mcp:
     type: stdio
-    container: ghcr.io/kerski/powerbi-modeling-mcp:latest
+    container: kerski/powerbi-modeling-mcp:latest
 ---
 
 # Generate Power BI Semantic Model Documentation
