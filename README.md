@@ -13,7 +13,7 @@ Because this template involves GitHub Actions secrets (tokens, credentials), we 
 gh repo create <your-username>/github-agentic-workflow-power-bi-mcp-example --private --confirm
 
 # 2. Clone this template repo locally
-git clone --bare https://github.com/kerski/github-agentic-workflow-power-bi-mcp-example.git
+git clone --bare https://github.com/clientfirsttech/github-agentic-workflow-power-bi-mcp-example.git
 cd github-agentic-workflow-power-bi-mcp-example.git
 
 # 3. Push the mirror to your new private repo
@@ -31,7 +31,7 @@ cd github-agentic-workflow-power-bi-mcp-example
 ### Option B: Import via the GitHub UI
 
 1. Go to [github.com/new/import](https://github.com/new/import).
-2. Paste the source URL: `https://github.com/kerski/github-agentic-workflow-power-bi-mcp-example`.
+2. Paste the source URL: `https://github.com/clientfirsttech/github-agentic-workflow-power-bi-mcp-example`.
 3. Set the **Owner** to your account or organization.
 4. Choose a repository name (e.g., `github-agentic-workflow-power-bi-mcp-example`).
 5. Select **Private**.
