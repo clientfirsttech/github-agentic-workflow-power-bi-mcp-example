@@ -50,6 +50,7 @@ Once your private repo is ready, continue with the [Setup Guide](#setup-guide) b
 ## Prerequisites
 
 - A GitHub repository with **admin access** (to configure secrets, permissions, and Actions)
+- **GitHub Actions must be enabled** on the repository. If Actions is disabled, go to **Settings → Actions → General** and select **Allow all actions and reusable workflows** (or an appropriate policy for your organization).
 - Access to [GitHub Copilot](https://github.com/features/copilot) (required by the agentic workflow engine)
 
 The GitHub CLI with the `gh-aw` extension is required to compile the agentic workflow.
