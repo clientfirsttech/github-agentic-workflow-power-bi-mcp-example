@@ -50,9 +50,15 @@ Once your private repo is ready, continue with the [Setup Guide](#setup-guide) b
 ## Prerequisites
 
 - A GitHub repository with **admin access** (to configure secrets, permissions, and Actions)
-- [GitHub CLI](https://cli.github.com/) installed locally
-- The [gh-aw extension](https://github.com/github/gh-aw) installed (`curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash`)
 - Access to [GitHub Copilot](https://github.com/features/copilot) (required by the agentic workflow engine)
+
+**Note:** This is optional. If you want to modify this agentic flow, you will need the GitHub CLI installed locally with the agentic extensions.
+
+1. Install the [GitHub CLI](https://cli.github.com/)
+2. Install the [`gh-aw` extension](https://github.com/github/gh-aw):
+```bash
+curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash
+```
 
 ## Setup Guide
 
@@ -154,6 +160,11 @@ To use this template with your own semantic models:
 | Agent cannot create a pull request | Check that **Workflow permissions** allow creating PRs (see [Step 2](#step-2-grant-github-actions-permission-to-create-pull-requests)). |
 | Workflow doesn't trigger on push | Verify the push was to `main` and the changed files match `*.SemanticModel/**`. |
 | `COPILOT_GITHUB_TOKEN` error | Ensure the secret is set correctly and the token has the **Copilot** account permission set to **Read-only** (see [Step 1](#step-1-set-up-the-copilot_github_token)). |
+
+* If you've edited the generate-pbi-docs.md file
+
+| Problem | Solution |
+|---|---|
 | Compiled `.lock.yml` is outdated | Run `gh aw compile` after editing the `.md` file and commit both files. |
 
 ## Acknowledgments
