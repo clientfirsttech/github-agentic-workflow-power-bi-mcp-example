@@ -6,6 +6,8 @@ This repository is a **template** for using [GitHub Agentic Workflows](https://g
 
 Because this template involves GitHub Actions secrets (tokens, credentials), we recommend hosting your copy in a **private repository**. GitHub does not allow forking a public repo as private, so use the steps below to mirror it instead.
 
+### Option A: Import via the CLI
+
 ```bash
 # 1. Create a new private repo on GitHub (do NOT initialize it with a README)
 gh repo create <your-username>/github-agentic-workflow-power-bi-mcp-example --private --confirm
@@ -25,6 +27,15 @@ rm -rf github-agentic-workflow-power-bi-mcp-example.git
 git clone https://github.com/<your-username>/github-agentic-workflow-power-bi-mcp-example.git
 cd github-agentic-workflow-power-bi-mcp-example
 ```
+
+### Option B: Import via the GitHub UI
+
+1. Go to [github.com/new/import](https://github.com/new/import).
+2. Paste the source URL: `https://github.com/clientfirsttech/github-agentic-workflow-power-bi-mcp-example`.
+3. Set the **Owner** to your account or organization.
+4. Choose a repository name (e.g., `github-agentic-workflow-power-bi-mcp-example`).
+5. Select **Private**.
+6. Click **Begin import** and wait for it to finish.
 
 Once your private repo is ready, continue with the [Setup Guide](#setup-guide) below.
 
